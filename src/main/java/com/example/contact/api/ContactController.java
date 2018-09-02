@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +35,8 @@ import com.example.contact.service.IContactService;
 @RequestMapping("/api/v1/contact")
 public class ContactController {
 
+	private static Logger LOGGER = LoggerFactory.getLogger(ContactController.class);
+
 	private IContactService contactService;
 
 	public ContactController(IContactService contactService) {
@@ -46,6 +50,7 @@ public class ContactController {
 	 */
 	@GetMapping
 	public ResponseEntity<List<ContactDTO>> getAllContact() {
+		LOGGER.debug("Start of get all contact");
 		return new ResponseEntity<>(this.contactService.getAllContact(), HttpStatus.OK);
 	}
 
@@ -56,6 +61,7 @@ public class ContactController {
 	 */
 	@PostMapping
 	public void createContact(@RequestBody @Valid ContactDTO contactDTO) {
+		LOGGER.debug("Start of create contact with  email:{}", contactDTO.getEmail());
 		this.contactService.createContact(contactDTO);
 	}
 
@@ -69,6 +75,7 @@ public class ContactController {
 	@PutMapping("/{id}")
 	public void updateContact(@PathVariable Long id, @RequestBody @Valid ContactDTO contactDTO)
 			throws ContactNotFoundException {
+		LOGGER.debug("Start of update existing contact with id:{}", id);
 		this.contactService.updateContact(id, contactDTO);
 	}
 
@@ -80,6 +87,7 @@ public class ContactController {
 	 */
 	@DeleteMapping("/{id}")
 	public void deleteContact(@PathVariable Long id) throws ContactNotFoundException {
+		LOGGER.debug("Stat of delte contact with id:{}", id);
 		this.contactService.deleteContact(id);
 	}
 }
